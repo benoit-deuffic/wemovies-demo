@@ -1,0 +1,99 @@
+<div class="bg-white" id="container">
+<div class="offcanvas-header" id="header">
+    <h1><a href="#" class="link-dark">A propos de WeMovies</a></h1>
+<div class="searchbar">
+    <div class="ui-widget">
+        <label for="Chercher">Recherche: </label>
+        <input id="movie">
+    </div>
+    <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+        <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    </div>
+</div>
+</div>
+<div class="dropdown" id="navigation">
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="/">Accueil</a>
+        </li>
+        {% for genre in genders.genres %}
+        <li class="list-group-item">
+            <a href="{{ path('wemovies_by_gender', {genre: genre.id}) }}">{{ genre.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div id="movie_index_preview">
+    {% for top_rated_movie in top_rated_movies %}
+    <div id="movie_preview">
+    <table>
+        <tr>
+            <td>
+                <div class="movie_poster">
+                    <img loading="lazy" class="poster"
+                         src="https://www.themoviedb.org/t/p/w220_and_h330_face/{{ top_rated_movie.poster_path }}"
+                         srcset="https://www.themoviedb.org/t/p/w220_and_h330_face/{{ top_rated_movie.poster_path }} 1x,
+                    https://www.themoviedb.org/t/p/w440_and_h660_face/{{ top_rated_movie.backdrop_path }} 2x"
+                         alt="">
+                </div>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                     <td>
+                         <h3>
+                             {{ top_rated_movie.title }}
+                         </h3>
+                     </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                {{ top_rated_movie.overview }}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+        </tr>
+    </table>
+    </div>
+    {% endfor %}
+</div>
+    <script>
+        $(function() {
+            function log( message ) {
+                $( "<div>" ).text( message ).prependTo( "#log" );
+                $( "#log" ).scrollTop( 0 );
+            }
+
+            $( "#movie" ).keypress({
+                source: function( request, response ) {
+                    $.ajax({
+                        method: 'POST',
+                        url: "/movies/search",
+                        dataType: "jsonp",
+                        data: {
+                            kw: request.term
+                        },
+                        success: function( data ) {
+                            response( data );
+                        }
+                    });
+                },
+                minLength: 3,
+                select: function( event, ui ) {
+                    log( ui.item ?
+                        "Selected: " + ui.item.label :
+                        "Nothing selected, input was " + this.value);
+                },
+                open: function() {
+                    $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                },
+                close: function() {
+                    $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                }
+            });
+        });
+    </script>

@@ -1,0 +1,36 @@
+body {
+    background-color: white;
+}
+
+#container {
+    flex-direction: row;
+}
+
+#navigation {
+    float: left;
+    width: 10%;
+}
+
+#movie_preview {
+   align-self: top;
+   text-align: center;
+}
+#movie_preview {
+    vertical-align: top;
+}
+#movie_index_preview {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content:space-evenly;
+}
+
+movie_poster {
+    width:10%;
+    height: auto;
+}
+
+#header {
+    height: 270px;
+}
+@import "../../node_modules/bootstrap";

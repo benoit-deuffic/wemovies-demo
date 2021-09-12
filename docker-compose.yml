@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  # nginx - web server
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker-config/nginx/Dockerfile
+    env_file: &env
+      - ./docker-config/nginx/.env
+    links:
+      - php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app/public:/var/www/project/app/public:cached
+  # php - personal home page
+  php:
+    build:
+      context: .
+      dockerfile: ./docker-config/alpine-php-dev-overlay/Dockerfile
+    image: bdeuffic/sf_fixerio_euroconverter
+    env_file:
+      - ./app/.env
+    expose:
+      - "9000"
+    volumes:
+      - ./app:/var/www/project/app:consistent
+      - ./app/vendor:/var/www/project/app/vendor:consistent
+      - ./app/var/logs:/var/www/project/app/var/logs:delegated
+      - ./app/var/cache:/var/www/project/app/var/cache:delegated
+

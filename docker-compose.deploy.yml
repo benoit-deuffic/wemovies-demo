@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  fixerio:
+    build:
+      context: .
+      dockerfile: ./docker-config/sffixerio/Dockerfile.alpine
+    image: bdeuffic/sf_fixerio_euroconverter
+
